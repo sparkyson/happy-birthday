@@ -1,0 +1,425 @@
+:root {
+  color-scheme: light;
+  --ink: #163727;
+  --muted: #63836e;
+  --green: #2f7a4d;
+  --leaf: #90b985;
+  --paper: #fffdf7;
+  --soft: #f2faef;
+  --line: #d7e8d2;
+  --gold: #c9a45b;
+  --shadow: 0 28px 80px rgba(31, 87, 55, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(135deg, #eff9ed, #ffffff 48%, #e8f4e4);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.82rem 1.15rem;
+  color: #fff;
+  background: var(--green);
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(47, 122, 77, 0.22);
+}
+
+button.secondary {
+  color: var(--green);
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.78rem 0.9rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px rgba(47, 122, 77, 0.12);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: var(--green);
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subtitle {
+  margin: 18px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 1.02rem;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.option-note {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 5;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  color: var(--green);
+  background: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+.random-strip {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.7);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+}
+
+.folded-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 64px 18px 28px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(194, 226, 185, 0.75), transparent 24rem),
+    linear-gradient(135deg, #edf8e9, #ffffff 52%, #edf8e9);
+}
+
+.folded-card {
+  width: min(1040px, 100%);
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  overflow: hidden;
+  border: 1px solid #e5eadf;
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  transform: perspective(1800px) rotateY(-3deg);
+}
+
+.folded-art {
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(25, 72, 42, 0.1), transparent 16px),
+    #fbfff8;
+}
+
+.folded-art::after {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  border: 1px solid rgba(47, 122, 77, 0.22);
+  border-radius: 8px;
+}
+
+.folded-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 64% bottom;
+}
+
+.folded-content {
+  position: relative;
+  display: grid;
+  align-content: center;
+  padding: clamp(28px, 6vw, 72px);
+  background:
+    linear-gradient(90deg, rgba(72, 96, 70, 0.08), transparent 20px),
+    radial-gradient(circle at 92% 8%, rgba(226, 240, 220, 0.8), transparent 13rem),
+    var(--paper);
+}
+
+.folded-content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(47, 122, 77, 0.2);
+}
+
+.folded-content h1,
+.envelope-card h1,
+.postcard-note h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.2rem, 9vw, 6.7rem);
+  font-weight: 500;
+  line-height: 0.92;
+}
+
+.envelope-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 64px 18px 28px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.95), transparent 20rem),
+    linear-gradient(160deg, #e7f5e2, #ffffff 58%, #edf7e9);
+}
+
+.envelope-scene {
+  width: min(920px, 100%);
+  display: grid;
+  place-items: center;
+  gap: 0;
+}
+
+.envelope-flap {
+  width: min(680px, 92%);
+  height: 180px;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.7), rgba(222, 240, 216, 0.65)),
+    var(--soft);
+  border: 1px solid var(--line);
+  transform: translateY(62px);
+  filter: drop-shadow(0 12px 22px rgba(47, 122, 77, 0.12));
+}
+
+.envelope-body {
+  position: relative;
+  width: min(760px, 100%);
+  min-height: 560px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(47, 122, 77, 0.12), transparent 34%),
+    linear-gradient(225deg, rgba(47, 122, 77, 0.1), transparent 34%),
+    #fffefa;
+  box-shadow: var(--shadow);
+  padding: clamp(22px, 5vw, 46px);
+}
+
+.envelope-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 0.82fr;
+  gap: clamp(18px, 4vw, 34px);
+  min-height: 500px;
+  padding: clamp(26px, 5vw, 54px);
+  border: 1px solid #e6eadf;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 46px rgba(47, 122, 77, 0.12);
+}
+
+.envelope-card img {
+  align-self: end;
+  width: 100%;
+  max-height: 440px;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.envelope-copy {
+  display: grid;
+  align-content: center;
+}
+
+.seal {
+  position: absolute;
+  right: clamp(18px, 4vw, 38px);
+  top: -26px;
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--green);
+  box-shadow: 0 12px 24px rgba(47, 122, 77, 0.24);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+}
+
+.postcard-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 64px 18px 28px;
+  background:
+    linear-gradient(90deg, rgba(47, 122, 77, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(47, 122, 77, 0.07) 1px, transparent 1px),
+    #f3faef;
+  background-size: 34px 34px;
+}
+
+.postcard {
+  width: min(1120px, 100%);
+  min-height: 640px;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  overflow: hidden;
+  border: 1px solid #ddd8c7;
+  border-radius: 8px;
+  background: #fffdf6;
+  box-shadow: var(--shadow);
+}
+
+.postcard-image {
+  position: relative;
+  min-height: 420px;
+  background: #f8fff4;
+}
+
+.postcard-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% bottom;
+}
+
+.stamp {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  border: 1px dashed var(--green);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--green);
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.postcard-note {
+  position: relative;
+  display: grid;
+  align-content: center;
+  padding: clamp(28px, 5vw, 62px);
+  background:
+    repeating-linear-gradient(#fffdf6 0 42px, rgba(47, 122, 77, 0.09) 43px),
+    #fffdf6;
+}
+
+.postcard-note::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 42px;
+  bottom: 42px;
+  width: 1px;
+  background: rgba(47, 122, 77, 0.2);
+}
+
+.postmark {
+  width: max-content;
+  margin-bottom: 20px;
+  border: 2px solid rgba(47, 122, 77, 0.38);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+
+@media (max-width: 760px) {
+  .option-note {
+    position: static;
+    width: max-content;
+    margin: 12px auto -38px;
+  }
+
+  .folded-page,
+  .envelope-page,
+  .postcard-page {
+    align-items: start;
+    padding: 48px 10px 16px;
+  }
+
+  .folded-card,
+  .envelope-card,
+  .postcard {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    transform: none;
+  }
+
+  .folded-art {
+    min-height: 250px;
+  }
+
+  .folded-content,
+  .postcard-note,
+  .envelope-card {
+    padding: 24px;
+  }
+
+  .folded-content h1,
+  .envelope-card h1,
+  .postcard-note h1 {
+    font-size: clamp(3rem, 18vw, 4.5rem);
+  }
+
+  .envelope-flap {
+    height: 112px;
+    transform: translateY(38px);
+  }
+
+  .envelope-body {
+    min-height: 0;
+    padding: 14px;
+  }
+
+  .envelope-card img {
+    order: -1;
+    max-height: 230px;
+  }
+
+  .postcard-image {
+    min-height: 260px;
+  }
+
+  .postcard-note::before {
+    display: none;
+  }
+}

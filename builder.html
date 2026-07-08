@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Happy birthday Builder</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <main class="builder-page">
+      <section class="builder-hero" aria-labelledby="builderTitle">
+        <img class="builder-lily" src="assets/lily-of-the-valley.png" alt="Lily of the valley flowers">
+        <div>
+          <h1 id="builderTitle">Happy birthday</h1>
+          <p class="intro">Build a master-password memory box. The JSON stores public present metadata; image and video payloads download as separate encrypted files.</p>
+        </div>
+      </section>
+
+      <form id="resumeForm" class="builder-form resume-form">
+        <fieldset>
+          <legend>Resume previous build</legend>
+          <p class="intro">If `resources.encrypted.json` and `resources/*.vault` live beside this app on the same server, the builder loads them automatically. Uploads are only a fallback.</p>
+          <label>
+            Existing resources.encrypted.json
+            <input id="resumeManifest" type="file" accept="application/json,.json">
+            <div id="resumeManifestPreview" class="loaded-file-display" aria-live="polite"></div>
+          </label>
+          <label>
+            Existing encrypted media files
+            <input id="resumeVaultFiles" type="file" multiple accept=".vault,application/octet-stream">
+            <div id="resumeVaultFilesPreview" class="loaded-file-display" aria-live="polite"></div>
+          </label>
+          <label>
+            Current master password
+            <span class="password-row">
+              <input id="resumeMasterPassword" type="password" autocomplete="off" required>
+              <button type="button" class="password-toggle" data-toggle-password="#resumeMasterPassword" aria-label="Show password" title="Show password"></button>
+            </span>
+          </label>
+          <div class="builder-toolbar">
+            <button type="submit">Resume editing</button>
+            <button id="saveResumedToFolder" type="button" class="secondary" disabled>Save to folder</button>
+          </div>
+        </fieldset>
+      </form>
+
+      <form id="builderForm" class="builder-form">
+        <fieldset id="masterEncryptionPanel">
+          <legend>Master encryption</legend>
+          <label>
+            Master password
+            <span class="password-row">
+              <input id="masterPassword" type="password" autocomplete="off" required>
+              <button type="button" class="password-toggle" data-toggle-password="#masterPassword" aria-label="Show password" title="Show password"></button>
+            </span>
+          </label>
+          <label>
+            PBKDF2 iterations
+            <input id="iterations" type="number" min="100000" step="50000" value="650000" required>
+          </label>
+        </fieldset>
+
+        <section class="builder-toolbar">
+          <button id="addPresent" type="button" class="secondary">Add present</button>
+          <button type="button" class="secondary open-password-modal">Change master password</button>
+          <button type="submit">Build encrypted downloads</button>
+          <button id="saveToFolder" type="button" class="secondary" disabled>Save directly to folder</button>
+        </section>
+
+        <section id="resourceList" class="resource-list"></section>
+      </form>
+
+      <section id="builderStatus" class="status" aria-live="polite"></section>
+      <section id="downloadArea" class="download-area"></section>
+    </main>
+
+    <dialog id="passwordModal" class="builder-modal">
+      <form id="rotatePasswordForm" class="builder-form modal-form">
+        <fieldset>
+          <legend>Change master password</legend>
+          <label>
+            Existing resources.encrypted.json
+            <input id="existingManifest" type="file" accept="application/json,.json" required>
+          </label>
+          <label>
+            Existing encrypted media files
+            <input id="existingVaultFiles" type="file" multiple accept=".vault,application/octet-stream">
+          </label>
+          <label>
+            Current master password
+            <span class="password-row">
+              <input id="currentMasterPassword" type="password" autocomplete="off" required>
+              <button type="button" class="password-toggle" data-toggle-password="#currentMasterPassword" aria-label="Show password" title="Show password"></button>
+            </span>
+          </label>
+          <label>
+            New master password
+            <span class="password-row">
+              <input id="newMasterPassword" type="password" autocomplete="off" required>
+              <button type="button" class="password-toggle" data-toggle-password="#newMasterPassword" aria-label="Show password" title="Show password"></button>
+            </span>
+          </label>
+          <div class="builder-toolbar">
+            <button type="submit">Change master password</button>
+            <button id="closePasswordModal" type="button" class="secondary">Close</button>
+          </div>
+        </fieldset>
+      </form>
+    </dialog>
+
+    <dialog id="mediaPreviewDialog" class="media-preview-dialog">
+      <button id="closeMediaPreview" type="button" class="ghost close-dialog" aria-label="Close preview">Close</button>
+      <div id="mediaPreviewContent" class="media-preview-content"></div>
+    </dialog>
+
+    <template id="resourceTemplate">
+      <article class="resource-editor">
+        <header>
+          <input class="resource-name" type="text" placeholder="Present title" aria-label="Present title">
+          <label class="hidden-toggle">
+            <input class="resource-hidden" type="checkbox" aria-label="Hidden present">
+            <span>Hidden</span>
+          </label>
+          <label class="secret-phrase-field">
+            <input class="resource-phrase" type="text" autocomplete="off" placeholder="Hidden unlock phrase" aria-label="Hidden unlock phrase">
+            <span class="field-hint">Leave blank after resume to keep existing phrase.</span>
+          </label>
+          <button type="button" class="ghost remove-resource" aria-label="Remove resource">Remove</button>
+        </header>
+
+        <label class="compact-control">
+          <textarea class="resource-text" rows="3" placeholder="Text present" aria-label="Text present"></textarea>
+        </label>
+        <div class="media-grid">
+          <label class="media-box compact-file">
+            <span class="media-placeholder">Add image</span>
+            <input class="resource-image" type="file" accept="image/*" aria-label="Image file">
+            <span class="media-state">No image yet</span>
+          </label>
+          <label class="media-box compact-file">
+            <span class="media-placeholder">Add video</span>
+            <input class="resource-video" type="file" accept="video/*" aria-label="Video file">
+            <span class="media-state">No video yet</span>
+          </label>
+          <div class="song-box compact-control">
+            <input class="resource-song" type="url" placeholder="YouTube Music link" aria-label="YouTube Music link">
+            <span class="song-state">No song link yet</span>
+            <a class="song-link-preview" href="#" target="_blank" rel="noreferrer" hidden>Open song</a>
+          </div>
+        </div>
+
+        <button type="button" class="secondary advanced-toggle">Advanced style</button>
+        <dialog class="advanced-dialog">
+          <form method="dialog" class="advanced-panel">
+            <header>
+              <strong>Advanced style</strong>
+              <button type="submit" class="ghost">Close</button>
+            </header>
+            <div class="editor-grid">
+              <label>
+                Present size
+                <select class="present-size">
+                  <option value="medium">Medium</option>
+                  <option value="small">Small</option>
+                  <option value="large">Large</option>
+                  <option value="tall">Tall</option>
+                </select>
+              </label>
+              <label>
+                Present color
+                <select class="present-color">
+                  <option value="sage">Sage</option>
+                  <option value="white">White</option>
+                  <option value="mint">Mint</option>
+                  <option value="emerald">Emerald</option>
+                  <option value="gold">Gold</option>
+                </select>
+              </label>
+              <label>
+                Present style
+                <select class="present-style">
+                  <option value="ribbon">Ribbon</option>
+                  <option value="dots">Dots</option>
+                  <option value="stripe">Stripe</option>
+                  <option value="botanical">Botanical</option>
+                </select>
+              </label>
+              <label>
+                Text font
+                <select class="resource-style">
+                  <option value="elegant">Elegant</option>
+                  <option value="handwritten">Handwritten</option>
+                  <option value="playful">Playful</option>
+                  <option value="cinematic">Cinematic</option>
+                  <option value="garden">Garden</option>
+                </select>
+                <span class="font-preview elegant">Font preview: the memories glow here.</span>
+              </label>
+            </div>
+          </form>
+        </dialog>
+      </article>
+    </template>
+
+    <script src="src/crypto.js"></script>
+    <script src="src/builder.js"></script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Folded Option 2 - Tri Fold</title>
+    <link rel="stylesheet" href="folded-options.css?v=3">
+  </head>
+  <body>
+    <div class="option-note">Folded 2 - Tri Fold</div>
+    <main class="page">
+      <input id="tri-toggle" class="unfold-check" type="checkbox">
+      <section class="tri-card">
+        <section class="tri-inside">
+          <div class="tri-content content">
+            <h1>Happy birthday</h1>
+            <p class="subtitle">The best present is the present. Here are some of the past presents that live as memories.</p>
+            <form class="form">
+              <label>Something you were told<input type="password"></label>
+              <label>Something you know<input type="password"></label>
+              <div class="actions">
+                <button type="button">Unlock</button>
+                <button type="button" class="secondary">Random greeting</button>
+              </div>
+            </form>
+            <div class="mini-greeting">Cake first, questions later.</div>
+          </div>
+          <div class="tri-art">
+            <img class="lily" src="lily-of-the-valley.png" alt="Lily of the valley flowers">
+          </div>
+        </section>
+        <section class="flap flap-left">
+          <div class="flap-front">
+            <div class="flap-label">Happy<br>birthday</div>
+            <p>Tap to unfold</p>
+          </div>
+          <div class="flap-back flap-back-text">
+            <div class="flap-label">Happy<br>birthday</div>
+          </div>
+        </section>
+        <section class="flap flap-right">
+          <div class="flap-front flap-art" aria-hidden="true"></div>
+          <div class="flap-back flap-back-image flap-art" aria-hidden="true"></div>
+        </section>
+        <section class="flap flap-top" aria-hidden="true"></section>
+        <label class="gate" for="tri-toggle" aria-label="Open the tri-fold card"></label>
+      </section>
+      <p class="hint">Click or tap the folded panels to open the card.</p>
+    </main>
+  </body>
+</html>

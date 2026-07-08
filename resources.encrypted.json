@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "createdAt": "2026-07-08T15:08:23.177Z",
+  "kdf": {
+    "name": "PBKDF2",
+    "hash": "SHA-256",
+    "iterations": 650000,
+    "salt": "45oAwy0i6DvCHCQRNLST2Q=="
+  },
+  "verifier": {
+    "iv": "6dbUfx2drkG6VeV+",
+    "ciphertext": "XLAj5+VIB7cxvu+hd3pL/5LdPC/IraIzLpCr"
+  },
+  "resources": [
+    {
+      "id": "6eb1dd03-9e98-4327-8bc6-6d3c25e1b332",
+      "title": "San Diego",
+      "visibility": "hidden",
+      "phraseHash": "UsBxl1R/NIOcZYbHHKDXBZ6OFfDsX0Imgs7T4BaOJ74=",
+      "encryptedPhrase": {
+        "iv": "CPdFsK7uy72PdTom",
+        "ciphertext": "92+f0831hXjiYPwMGiBabEE+J+hxIa/T63+Z3VPYwEQRmGOCDDI="
+      },
+      "present": {
+        "size": "large",
+        "color": "sage",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "handwritten"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "Dms2uXWlsYsky9MC",
+            "ciphertext": "wrbM6iJi7lI+iDHGQJtVARX/i180DLrlwbr8IX2o3F8PNxRGImCSDmAnA/wBR8M0XXa4HcFnHlKfMaLhOw=="
+          }
+        },
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/san-diego-image-6eb1dd03-9e98-4327-8bc6-6d3c25e1b332.vault",
+            "iv": "FjAiUPYsZctLz6ef",
+            "mimeType": "image/jpeg",
+            "originalName": "IMG_7646.jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "000764f4-b08c-4d35-a1d0-d85c9fe2120b",
+      "title": "I Wish You Have It All",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "mint",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "elegant"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "yIkfTpCKEyHqVwfg",
+            "ciphertext": "CM/Yr9dm1QrSrcfTBDQq/0s3hvWiWVIgPfk7s6bous6YwE99lg9O8+cycVxPPygkw4v2HC6KGzfeFoWQY1l0ElCa3/N/pTI10aXXwk5RAPc="
+          }
+        },
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "8TrKlG1Mnsxwyxp2",
+            "ciphertext": "WGOami8prTqKmHveDf2bfSrSLB1AVXQy7Hwv/iPIMfiCvkiNLzaOIWj1Adab8AA4wg+cbbAQiaxgUcHBgQk/oaE/KjvmmYG1Og42ZGC9nmxWjnNFrkxNy+37yw=="
+          }
+        }
+      ]
+    }
+  ]
+}

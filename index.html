@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Happy birthday</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <main class="card-page">
+      <input id="foldToggle" class="fold-toggle" type="checkbox">
+      <section class="birthday-card" aria-labelledby="title">
+        <section class="card-inside">
+          <div class="card-copy">
+            <h1 id="title" class="easter-target" tabindex="0">Happy birthday</h1>
+            <p id="subtitle" class="intro easter-target" tabindex="0">The best present is the present. Here are some of the past presents that live as memories.</p>
+
+            <form id="unlockForm" class="unlock-form">
+              <label>
+                Clue in
+                <span class="password-row">
+                  <input id="masterPassword" type="password" autocomplete="off" required>
+                  <button id="toggleMasterPassword" type="button" class="password-toggle" aria-label="Show password" title="Show password"></button>
+                </span>
+              </label>
+              <div class="actions">
+                <button type="submit">Open presents</button>
+              </div>
+            </form>
+            <div id="memorySearchSlot" class="memory-search-slot" hidden></div>
+          </div>
+          <div class="card-art" aria-hidden="true"></div>
+        </section>
+
+        <section class="fold-panel fold-left">
+          <div class="fold-front">
+            <div>
+              <div class="fold-title">Happy<br>birthday</div>
+              <p>Tap to flip the card</p>
+            </div>
+          </div>
+          <div class="fold-back fold-back-text">
+            <div class="fold-title">Happy<br>birthday</div>
+          </div>
+        </section>
+        <section class="fold-panel fold-right">
+          <div class="fold-front fold-art" aria-hidden="true"></div>
+          <div class="fold-back fold-back-image fold-art" aria-hidden="true"></div>
+        </section>
+        <section class="fold-panel fold-top" aria-hidden="true"></section>
+        <label class="fold-gate" for="foldToggle" aria-label="Unfold birthday card"></label>
+      </section>
+
+      <section id="status" class="status" aria-live="polite"></section>
+      <section id="result" class="result" aria-live="polite"></section>
+
+      <section id="presentArea" class="present-area" hidden>
+        <header class="present-header">
+          <form id="memorySearchForm" class="memory-search">
+            <input id="memorySearchPhrase" type="text" autocomplete="off" placeholder="Search your memory" aria-label="Search your memory">
+            <button id="searchMemory" type="submit" class="secondary">Check memory</button>
+          </form>
+        </header>
+        <div id="presentGrid" class="present-grid"></div>
+      </section>
+    </main>
+
+    <dialog id="presentDialog" class="present-dialog">
+      <button id="closePresent" type="button" class="ghost close-dialog" aria-label="Close present">Close</button>
+      <div id="presentContent"></div>
+    </dialog>
+
+    <section id="songPlayer" class="song-player" hidden aria-live="polite">
+      <div class="song-player-bar">
+        <div>
+          <p class="song-player-label">Now playing</p>
+          <h2 id="songPlayerTitle">Birthday song</h2>
+        </div>
+        <div class="song-player-actions">
+          <button id="songPlaybackToggle" type="button" class="secondary">Pause song</button>
+          <button id="dismissSongPlayer" type="button" class="ghost song-dismiss" aria-label="Dismiss now playing">Close</button>
+          <a id="songPlayerLink" class="song-link small" target="_blank" rel="noreferrer">Open song</a>
+        </div>
+      </div>
+      <div id="songPlayerFrameSlot" class="song-player-frame"></div>
+    </section>
+
+    <script src="src/crypto.js"></script>
+    <script src="src/greetings.js"></script>
+    <script src="src/app.js"></script>
+  </body>
+</html>

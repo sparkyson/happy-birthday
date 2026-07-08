@@ -168,6 +168,18 @@ h1 {
   line-height: 0.92;
 }
 
+.rainbow-word {
+  color: #e44b5f;
+  background: linear-gradient(90deg, #e44b5f 0%, #f29f05 18%, #f7df1e 36%, #6bcf63 55%, #4ab1f2 74%, #8d6cf5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.birthday-word {
+  color: var(--green);
+}
+
 .intro {
   max-width: 34rem;
   margin: 24px 0 0;
@@ -782,6 +794,14 @@ body.song-player-open .card-page {
   text-align: center;
 }
 
+.fold-title .rainbow-word {
+  color: #e44b5f;
+}
+
+.fold-title .birthday-word {
+  color: var(--green);
+}
+
 .fold-back {
   display: none;
   opacity: 0;
@@ -1049,7 +1069,9 @@ body.song-player-open .card-page {
 }
 
 .present-dialog {
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: min(860px, calc(100% - 24px));
   max-height: calc(100vh - 32px);
   overflow: auto;
@@ -1058,11 +1080,11 @@ body.song-player-open .card-page {
   padding: 64px 28px 28px;
   background: var(--paper);
   box-shadow: var(--shadow);
+  transform: translate(-50%, -50%);
 }
 
 body.song-player-open .present-dialog {
-  max-height: calc(100vh - 330px);
-  margin-bottom: 290px;
+  max-height: calc(100vh - 360px);
 }
 
 .present-dialog::backdrop {
@@ -1535,8 +1557,7 @@ body.song-player-open .present-dialog {
   }
 
   body.song-player-open .present-dialog {
-    max-height: calc(100vh - 390px);
-    margin-bottom: 350px;
+    max-height: calc(100vh - 410px);
   }
 
   .close-dialog {

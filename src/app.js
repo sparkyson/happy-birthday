@@ -376,7 +376,7 @@ async function loadManifest() {
       throw new Error("Manifest format needs to be rebuilt with builder.html.");
     }
     openPresentsButton.disabled = false;
-    setStatus("Unfold the card and enter the clue.");
+    setStatus("");
   } catch (error) {
     const localFileHint = location.protocol === "file:"
       ? " Open this through a local server, for example http://localhost:8000/index.html."

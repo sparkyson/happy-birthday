@@ -684,7 +684,7 @@ body.song-player-open .card-page {
   border-radius: 8px;
   background:
     linear-gradient(90deg, rgba(251, 255, 249, 0.9), rgba(251, 255, 249, 0.54)),
-    url("../assets/lily-of-the-valley.png") 62% bottom / cover no-repeat,
+    url("../assets/lily-of-the-valley-v1.png") 62% bottom / cover no-repeat,
     var(--paper);
   box-shadow: var(--shadow);
   backface-visibility: hidden;
@@ -715,7 +715,7 @@ body.song-player-open .card-page {
 
 .card-art,
 .fold-art {
-  background-image: url("../assets/lily-of-the-valley.png");
+  background-image: url("../assets/lily-of-the-valley-v1.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 62% bottom;
@@ -743,7 +743,7 @@ body.song-player-open .card-page {
   border-radius: 8px;
   background:
     linear-gradient(90deg, rgba(251, 255, 249, 0.76), rgba(251, 255, 249, 0.18)),
-    url("../assets/lily-of-the-valley.png") 62% bottom / cover no-repeat,
+    url("../assets/lily-of-the-valley-v1.png") 62% bottom / cover no-repeat,
     #f9fff6;
   backface-visibility: hidden;
 }

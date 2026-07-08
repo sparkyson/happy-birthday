@@ -83,7 +83,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--output",
-        default="assets/happy-lupeanu-qr.png",
+        default="assets/happy-lupeanu-qr-v1.png",
         help="Output PNG path.",
     )
     parser.add_argument(

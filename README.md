@@ -99,6 +99,19 @@ node tools/validate_password.mjs \
 
 It exits with a nonzero status when the password is wrong or a resource cannot be decrypted.
 
+## Dump Hidden Phrases
+
+Use the extractor to print every hidden phrase in clear text:
+
+```sh
+node tools/dump_hidden_phrases.mjs \
+  --manifest resources.encrypted.json \
+  --password xcc \
+  --json
+```
+
+Omit `--json` for a plain text list. The command only works if you know the master password.
+
 For local preview, run a static server from this directory:
 
 ```sh

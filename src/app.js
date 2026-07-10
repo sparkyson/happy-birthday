@@ -112,10 +112,6 @@ function renderPresentButton(resource, number, isHidden = false) {
   button.className = presentClasses(resource);
   button.dataset.resourceId = resource.id;
 
-  const numberTag = document.createElement("span");
-  numberTag.className = "present-number";
-  numberTag.textContent = number;
-
   const bow = document.createElement("span");
   bow.className = "present-bow";
   bow.setAttribute("aria-hidden", "true");
@@ -134,7 +130,10 @@ function renderPresentButton(resource, number, isHidden = false) {
     types.append(icon);
   }
 
-  button.append(numberTag, bow, types, label);
+  if (number) {
+    button.dataset.presentNumber = String(number);
+  }
+  button.append(bow, types, label);
   button.addEventListener("click", () => openPresent(resource));
   presentGrid.append(button);
 }
@@ -327,13 +326,22 @@ async function openPresent(resource) {
 
   try {
     const wrapper = document.createElement("article");
-    wrapper.className = "resource-view";
+    const items = [...(resource.items || [])].sort((left, right) => {
+      const order = { image: 0, video: 1, song: 2, text: 3 };
+      return (order[left.type] ?? 99) - (order[right.type] ?? 99);
+    });
+    const hasText = items.some((item) => item.type === "text");
+    const hasVisual = items.some((item) => item.type === "image" || item.type === "video");
+    wrapper.className = [
+      "resource-view",
+      hasText && hasVisual ? "resource-view-mixed" : "",
+    ].filter(Boolean).join(" ");
 
     const heading = document.createElement("h2");
     heading.textContent = resource.title || "Memory present";
     wrapper.append(heading);
 
-    for (const item of resource.items || []) {
+    for (const item of items) {
       const payload = await decryptItem(item);
       const section = document.createElement("section");
       section.className = `resource-item ${item.meta?.fontStyle || ""}`.trim();
@@ -408,7 +416,7 @@ async function searchMemory(event) {
   }
 
   const hidden = (manifest.resources || []).filter(
-    (resource) => resource.visibility === "hidden" && !revealedHidden.has(resource.id)
+    (resource) => resource.visibility === "hidden"
   );
 
   if (hidden.length === 0) {

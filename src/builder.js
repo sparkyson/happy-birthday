@@ -392,6 +392,10 @@ function safeFileName(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48) || "present";
 }
 
+function stableVaultFileName(id, type) {
+  return `${safeFileName(id)}-${type}.vault`;
+}
+
 async function publicResourceFromEditor(editor, id, aesBytes) {
   const state = editorState.get(editor) || {};
   const visibility = editor.querySelector(".resource-hidden").checked ? "hidden" : "visible";
@@ -433,7 +437,7 @@ async function encryptedFileItem({ file, type, title, id, aesBytes }) {
 
 async function encryptedBytesItem({ bytes, type, title, id, aesBytes, mimeType, originalName, path = null }) {
   const encrypted = await encryptBytes(bytes, aesBytes);
-  const fileName = path ? path.split("/").pop() : `${safeFileName(title)}-${type}-${id}.vault`;
+  const fileName = path ? path.split("/").pop() : stableVaultFileName(id, type);
   return {
     item: {
       type,
@@ -456,6 +460,9 @@ async function encryptedBytesItem({ bytes, type, title, id, aesBytes, mimeType, 
 async function buildResource(editor, aesBytes, reportProgress = () => {}) {
   const state = editorState.get(editor) || {};
   const id = state.id || makeId();
+  if (state.id !== id) {
+    editorState.set(editor, { ...state, id });
+  }
   const resource = await publicResourceFromEditor(editor, id, aesBytes);
   const files = [];
 

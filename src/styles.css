@@ -297,6 +297,11 @@ select:focus {
   padding: clamp(28px, 5vw, 52px);
 }
 
+.resource-view {
+  display: grid;
+  gap: 18px;
+}
+
 .language-label {
   margin: 0 0 12px;
   color: var(--green);
@@ -339,10 +344,21 @@ select:focus {
   background: var(--mist);
 }
 
+.resource-view-mixed img,
+.resource-view-mixed video {
+  max-height: 42vh;
+}
+
+.resource-item {
+  display: grid;
+  gap: 12px;
+}
+
 .text-surprise {
   white-space: pre-wrap;
-  font-size: clamp(1.45rem, 4vw, 3rem);
-  line-height: 1.25;
+  font-size: clamp(1rem, 2.4vw, 1.7rem);
+  line-height: 1.35;
+  max-width: 42rem;
 }
 
 .resource-view.elegant .text-surprise,
@@ -684,7 +700,7 @@ body.song-player-open .card-page {
   border-radius: 8px;
   background:
     linear-gradient(90deg, rgba(251, 255, 249, 0.9), rgba(251, 255, 249, 0.54)),
-    url("../assets/lily-of-the-valley-v1.png") 62% bottom / cover no-repeat,
+    url("../assets/lily-of-the-valley.png?v=20260712") 62% bottom / cover no-repeat,
     var(--paper);
   box-shadow: var(--shadow);
   backface-visibility: hidden;
@@ -715,7 +731,7 @@ body.song-player-open .card-page {
 
 .card-art,
 .fold-art {
-  background-image: url("../assets/lily-of-the-valley-v1.png");
+  background-image: url("../assets/lily-of-the-valley.png?v=20260712");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 62% bottom;
@@ -743,7 +759,7 @@ body.song-player-open .card-page {
   border-radius: 8px;
   background:
     linear-gradient(90deg, rgba(251, 255, 249, 0.76), rgba(251, 255, 249, 0.18)),
-    url("../assets/lily-of-the-valley-v1.png") 62% bottom / cover no-repeat,
+    url("../assets/lily-of-the-valley.png?v=20260712") 62% bottom / cover no-repeat,
     #f9fff6;
   backface-visibility: hidden;
 }
@@ -1070,21 +1086,27 @@ body.song-player-open .card-page {
 
 .present-dialog {
   position: fixed;
-  top: 50%;
+  top: calc(50% + 56px);
   left: 50%;
   width: min(860px, calc(100% - 24px));
-  max-height: calc(100vh - 32px);
-  overflow: auto;
+  max-height: calc(100vh - 88px);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 64px 28px 28px;
+  padding: 18px 18px 18px;
   background: var(--paper);
   box-shadow: var(--shadow);
   transform: translate(-50%, -50%);
 }
 
+.present-dialog[open] {
+  display: flex;
+}
+
 body.song-player-open .present-dialog {
-  max-height: calc(100vh - 360px);
+  max-height: calc(100vh - 416px);
 }
 
 .present-dialog::backdrop {
@@ -1093,15 +1115,21 @@ body.song-player-open .present-dialog {
 
 .close-dialog {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 14px;
+  right: 14px;
   z-index: 1;
 }
 
+#presentContent {
+  min-height: 0;
+  overflow: auto;
+  padding-top: 44px;
+}
+
 .resource-view h2 {
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.8rem, 4.4vw, 3.2rem);
   font-weight: 500;
 }
 
@@ -1557,7 +1585,7 @@ body.song-player-open .present-dialog {
   }
 
   body.song-player-open .present-dialog {
-    max-height: calc(100vh - 410px);
+    max-height: calc(100vh - 466px);
   }
 
   .close-dialog {

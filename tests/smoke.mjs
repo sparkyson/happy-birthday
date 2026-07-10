@@ -387,8 +387,8 @@ async function runIndexTests(cdp, baseUrl) {
   assert(unlockedFormState.memoryButton === "Check memory", "Memory search button text is wrong.");
   const visibleTitleRendered = await evaluate(cdp, session, "document.querySelector('.present[data-resource-id=\"visible-text\"] .present-label')?.textContent");
   assert(visibleTitleRendered === visibleTitle, "Public present label did not preserve title case.");
-  const presentNumber = await evaluate(cdp, session, "document.querySelector('.present .present-number')?.textContent");
-  assert(presentNumber === "1", "Present number was not rendered.");
+  const presentNumber = await evaluate(cdp, session, "document.querySelector('.present .present-number')");
+  assert(presentNumber === null, "Present number badge should not be rendered.");
 
   await evaluate(cdp, session, "document.querySelector('.present[data-resource-id=\"visible-text\"]').click()");
   const textOpened = await waitFor(
@@ -680,6 +680,20 @@ async function runBuilderTests(cdp, baseUrl) {
   assert(output.encryptedPhrases[0]?.length > 20, "Builder did not store encrypted hidden phrase.");
   assert(output.filePaths.length === 3, "Builder did not export the expected encrypted media files.");
   assert(output.filePaths.every((path) => path.startsWith("resources/")), "Builder media resource does not point to resources/.");
+
+  await evaluate(cdp, session, `
+    document.querySelector('#builderForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  `);
+  await waitFor(cdp, session, "document.querySelectorAll('.download-link').length === 4", "builder rebuild downloads");
+  const outputAgain = await evaluate(cdp, session, `
+    fetch(document.querySelector('.download-link[download="resources.encrypted.json"]').href).then(async (response) => {
+      const manifest = await response.json();
+      return manifest.resources.flatMap((resource) => resource.items)
+        .filter((item) => item.source.kind === 'file')
+        .map((item) => item.source.path);
+    })
+  `);
+  assert(JSON.stringify(outputAgain) === JSON.stringify(output.filePaths), "Rebuilding the same editor state should keep vault filenames stable.");
 }
 
 async function runRotatePasswordCliTests() {

@@ -33,6 +33,14 @@ let activeSongUrl = "";
 let songPaused = false;
 openPresentsButton.disabled = true;
 
+const historyState = {
+  closed: "closed",
+  card: "card-open",
+  present: "present-open",
+};
+
+let lastHistoryState = historyState.closed;
+
 function setStatus(message, kind = "") {
   status.textContent = message;
   status.className = `status ${kind}`.trim();
@@ -169,6 +177,50 @@ function scrollToPresentArea() {
   }
   scroll();
 }
+
+function syncHistoryState(nextState, replace = false) {
+  if (!window.history?.state || window.history.state.view !== nextState) {
+    const method = replace ? "replaceState" : "pushState";
+    window.history[method]({ view: nextState }, "");
+  }
+  lastHistoryState = nextState;
+}
+
+function closePresentDialogFromHistory() {
+  if (presentDialog.open) {
+    presentDialog.close();
+  }
+}
+
+function closeCardFromHistory() {
+  closePresentDialogFromHistory();
+  masterKey = null;
+  revealedHidden = new Set();
+  document.body.classList.remove("presents-open");
+  presentArea.hidden = true;
+  showUnlockForm();
+  if (foldToggle.checked) {
+    foldToggle.checked = false;
+  }
+  openPresentsButton.disabled = false;
+}
+
+window.addEventListener("popstate", (event) => {
+  const view = event.state?.view || historyState.closed;
+  lastHistoryState = view;
+
+  if (view === historyState.present) {
+    return;
+  }
+
+  if (view === historyState.card) {
+    closePresentDialogFromHistory();
+    foldToggle.checked = true;
+    return;
+  }
+
+  closeCardFromHistory();
+});
 
 async function decryptItem(item) {
   if (item.source.kind === "inline") {
@@ -332,6 +384,9 @@ async function openPresent(resource) {
     }
 
     presentContent.append(wrapper);
+    if (window.history.state?.view !== historyState.present) {
+      syncHistoryState(historyState.present);
+    }
     presentDialog.showModal();
     setStatus("Present opened.", "success");
   } catch (error) {
@@ -412,6 +467,7 @@ form.addEventListener("submit", async (event) => {
     renderVisiblePresents();
     showMemorySearchInCard();
     document.body.classList.add("presents-open");
+    syncHistoryState(historyState.card);
     setStatus("Presents are open.", "success");
     scrollToPresentArea();
   } catch (error) {
@@ -427,8 +483,15 @@ form.addEventListener("submit", async (event) => {
 });
 
 foldToggle.addEventListener("change", () => {
-  if (!foldToggle.checked) return;
-  window.setTimeout(() => masterPasswordInput.focus(), 180);
+  if (foldToggle.checked) {
+    window.setTimeout(() => masterPasswordInput.focus(), 180);
+    return;
+  }
+
+  closePresentDialogFromHistory();
+  if (window.history.state?.view === historyState.card) {
+    window.history.back();
+  }
 });
 
 toggleMasterPasswordButton.addEventListener("click", () => {
@@ -440,10 +503,18 @@ toggleMasterPasswordButton.addEventListener("click", () => {
 });
 
 memorySearchForm.addEventListener("submit", searchMemory);
-closePresentButton.addEventListener("click", () => presentDialog.close());
+closePresentButton.addEventListener("click", () => {
+  presentDialog.close();
+  if (window.history.state?.view === historyState.present) {
+    window.history.back();
+  }
+});
 presentDialog.addEventListener("click", (event) => {
   if (event.target === presentDialog) {
     presentDialog.close();
+    if (window.history.state?.view === historyState.present) {
+      window.history.back();
+    }
   }
 });
 songPlaybackToggle.addEventListener("click", () => {
@@ -478,4 +549,5 @@ for (const element of [title, subtitle]) {
   });
 }
 
+window.history.replaceState({ view: historyState.closed }, "");
 loadManifest();

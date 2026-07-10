@@ -512,6 +512,28 @@ async function runRandomOrderTests(cdp, baseUrl) {
   shuffledServer.close();
 }
 
+async function runBrowserBackTests(cdp, baseUrl) {
+  const session = await openPage(cdp, `${baseUrl}/index.html`);
+  await waitFor(cdp, session, "document.readyState === 'complete' && !!window.VaultCrypto", "back load");
+  await waitFor(cdp, session, "!document.querySelector('#unlockForm button[type=\"submit\"]').disabled", "back manifest-ready unlock button");
+
+  await evaluate(cdp, session, `
+    document.querySelector('.fold-gate').click();
+    document.querySelector('#masterPassword').value = 'master';
+    document.querySelector('#unlockForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  `);
+  await waitFor(cdp, session, "document.querySelectorAll('.present').length === 1", "back presents");
+
+  await evaluate(cdp, session, "document.querySelector('.present').click()");
+  await waitFor(cdp, session, "document.querySelector('#presentDialog').open", "present dialog open");
+
+  await evaluate(cdp, session, "history.back()");
+  await waitFor(cdp, session, "!document.querySelector('#presentDialog').open && document.querySelector('#foldToggle').checked", "present dialog closed by back");
+
+  await evaluate(cdp, session, "history.back()");
+  await waitFor(cdp, session, "!document.querySelector('#foldToggle').checked && !document.body.classList.contains('presents-open')", "card closed by back");
+}
+
 async function runMobileIndexTests(cdp, baseUrl) {
   const session = await openPage(cdp, `${baseUrl}/index.html`);
   await cdp.send("Emulation.setDeviceMetricsOverride", {
@@ -704,40 +726,30 @@ async function runRotatePasswordCliTests() {
 
 async function runValidatePasswordCliTests() {
   const tempRoot = await mkdtemp(join(tmpdir(), "lily-validate-cli-"));
-  const manifestPath = join(tempRoot, "resources.encrypted.json");
-  const manifestResult = spawnSync("git", ["show", "HEAD:resources.encrypted.json"], {
-    cwd: root.pathname,
-    encoding: "utf8",
-  });
-  assert(manifestResult.status === 0, `Could not load the last known good manifest from Git: ${manifestResult.stderr || manifestResult.stdout}`);
-  await writeFile(manifestPath, manifestResult.stdout);
-
-  const manifest = JSON.parse(manifestResult.stdout);
   const vaultDir = join(tempRoot, "resources");
   await mkdir(vaultDir, { recursive: true });
+  const fixture = await makeResumeManifest();
+  const manifestPath = join(tempRoot, "resources.encrypted.json");
+  await writeFile(manifestPath, JSON.stringify(fixture.manifest, null, 2));
+
+  const manifest = fixture.manifest;
   const fileItem = manifest.resources.flatMap((resource) => resource.items || []).find((item) => item.source.kind === "file");
   assert(fileItem, "Expected the committed manifest to contain at least one encrypted media file.");
   const fileName = fileItem.source.path.split("/").pop();
-  const vaultResult = spawnSync("git", ["show", `HEAD:resources/${fileName}`], {
-    cwd: root.pathname,
-    encoding: "buffer",
-    maxBuffer: 20 * 1024 * 1024,
-  });
-  assert(vaultResult.status === 0, `Could not load the last known good vault file from Git: ${vaultResult.stderr || vaultResult.stdout}`);
-  await writeFile(join(vaultDir, fileName), vaultResult.stdout);
+  await writeFile(join(vaultDir, fileName), Buffer.from(fixture.vaultFiles.get(`/resources/${fileName}`)));
 
   const success = spawnSync("node", [
     "tools/validate_password.mjs",
     "--manifest", manifestPath,
-    "--password", "xcc",
+    "--password", "master",
   ], { cwd: root.pathname, encoding: "utf8" });
-  assert(success.status === 0, `Password validation should accept xcc: ${success.stderr || success.stdout}`);
+  assert(success.status === 0, `Password validation should accept master: ${success.stderr || success.stdout}`);
   assert((success.stdout || "").includes("Password is valid."), "Password validation should confirm success.");
 
   const checked = spawnSync("node", [
     "tools/validate_password.mjs",
     "--manifest", manifestPath,
-    "--password", "xcc",
+    "--password", "master",
     "--check-resources",
     "--vault-dir", vaultDir,
   ], { cwd: root.pathname, encoding: "utf8" });
@@ -749,7 +761,7 @@ async function runValidatePasswordCliTests() {
   const broken = spawnSync("node", [
     "tools/validate_password.mjs",
     "--manifest", manifestPath,
-    "--password", "xcc",
+    "--password", "master",
     "--check-resources",
     "--vault-dir", brokenDir,
   ], { cwd: root.pathname, encoding: "utf8" });
@@ -761,6 +773,25 @@ async function runValidatePasswordCliTests() {
     "--password", "wrong",
   ], { cwd: root.pathname, encoding: "utf8" });
   assert(failure.status !== 0, "Password validation should reject a wrong password.");
+}
+
+async function runDumpHiddenPhrasesCliTests() {
+  const tempRoot = await mkdtemp(join(tmpdir(), "lily-hidden-cli-"));
+  const manifestPath = join(tempRoot, "resources.encrypted.json");
+  const fixture = await makeResumeManifest("master");
+  await writeFile(manifestPath, JSON.stringify(fixture.manifest, null, 2));
+  const hiddenCount = fixture.manifest.resources.filter((resource) => resource.encryptedPhrase).length;
+  const result = spawnSync("node", [
+    "tools/dump_hidden_phrases.mjs",
+    "--manifest", manifestPath,
+    "--password", "master",
+    "--json",
+  ], { cwd: root.pathname, encoding: "utf8" });
+
+  assert(result.status === 0, `Hidden phrase extraction failed: ${result.stderr || result.stdout}`);
+  const payload = JSON.parse(result.stdout);
+  assert(payload.hidden.length === hiddenCount, "Hidden phrase extraction returned the wrong number of phrases.");
+  assert(payload.hidden.every((entry) => typeof entry.phrase === "string" && entry.phrase.length > 0), "Hidden phrase extraction returned an empty phrase.");
 }
 
 async function runDiskResumeTests(cdp, baseUrl) {
@@ -963,10 +994,12 @@ const cdp = await createCdp(wsUrl);
 try {
   await runIndexTests(cdp, baseUrl);
   await runRandomOrderTests(cdp, baseUrl);
+  await runBrowserBackTests(cdp, baseUrl);
   await runMobileIndexTests(cdp, baseUrl);
   await runBuilderTests(cdp, baseUrl);
   await runRotatePasswordCliTests();
   await runValidatePasswordCliTests();
+  await runDumpHiddenPhrasesCliTests();
   await runDiskResumeTests(cdp, resumeBaseUrl);
   await runManifestOnlyResumeTests(cdp, manifestOnlyBaseUrl);
   await runResumeAddPhotoSaveTests(cdp, xccResumeBaseUrl);

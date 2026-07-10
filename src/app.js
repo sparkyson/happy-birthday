@@ -62,6 +62,15 @@ function iconForType(type) {
   }[type] || "?";
 }
 
+function shuffledCopy(items) {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
 function renderGreeting() {
   const greeting = randomGreeting();
   clearResult();
@@ -124,13 +133,12 @@ function renderPresentButton(resource, number, isHidden = false) {
 
 function renderVisiblePresents() {
   presentGrid.replaceChildren();
-  const resources = manifest.resources || [];
+  const resources = shuffledCopy([
+    ...(manifest.resources || []).filter((item) => item.visibility !== "hidden"),
+    ...(manifest.resources || []).filter((item) => revealedHidden.has(item.id)),
+  ]);
   let presentNumber = 1;
-  for (const resource of resources.filter((item) => item.visibility !== "hidden")) {
-    renderPresentButton(resource, presentNumber);
-    presentNumber += 1;
-  }
-  for (const resource of resources.filter((item) => revealedHidden.has(item.id))) {
+  for (const resource of resources) {
     renderPresentButton(resource, presentNumber, true);
     presentNumber += 1;
   }

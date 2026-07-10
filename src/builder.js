@@ -1,8 +1,5 @@
 const form = document.querySelector("#builderForm");
 const resumeForm = document.querySelector("#resumeForm");
-const rotatePasswordForm = document.querySelector("#rotatePasswordForm");
-const passwordModal = document.querySelector("#passwordModal");
-const closePasswordModalButton = document.querySelector("#closePasswordModal");
 const masterEncryptionPanel = document.querySelector("#masterEncryptionPanel");
 const masterPasswordInput = document.querySelector("#masterPassword");
 const iterationsInput = document.querySelector("#iterations");
@@ -12,11 +9,9 @@ const resumeVaultFilesInput = document.querySelector("#resumeVaultFiles");
 const resumeVaultFilesPreview = document.querySelector("#resumeVaultFilesPreview");
 const resumeMasterPasswordInput = document.querySelector("#resumeMasterPassword");
 const resumeSaveToFolderButton = document.querySelector("#saveResumedToFolder");
-const existingManifestInput = document.querySelector("#existingManifest");
-const existingVaultFilesInput = document.querySelector("#existingVaultFiles");
-const currentMasterPasswordInput = document.querySelector("#currentMasterPassword");
-const newMasterPasswordInput = document.querySelector("#newMasterPassword");
 const addPresentButton = document.querySelector("#addPresent");
+const bulkImageButton = document.querySelector("#bulkImageButton");
+const bulkImageInput = document.querySelector("#bulkImageInput");
 const saveToFolderButton = document.querySelector("#saveToFolder");
 const resourceList = document.querySelector("#resourceList");
 const template = document.querySelector("#resourceTemplate");
@@ -295,7 +290,10 @@ function addPresent(existing = null, { prepend = false } = {}) {
   const fallbackTitle = existing?.title || `Present ${nextId}`;
   nextId += 1;
 
-  fragment.querySelector(".resource-name").value = existing?.title || fallbackTitle;
+  fragment.querySelector(".resource-name").value =
+    existing && Object.prototype.hasOwnProperty.call(existing, "title")
+      ? existing.title
+      : fallbackTitle;
   fragment.querySelector(".resource-hidden").checked = existing?.visibility === "hidden";
   fragment.querySelector(".present-size").value = existing?.present?.size || pick(randomOptions.size);
   fragment.querySelector(".present-color").value = existing?.present?.color || pick(randomOptions.color);
@@ -338,6 +336,22 @@ function addPresent(existing = null, { prepend = false } = {}) {
     resourceList.append(fragment);
   }
   return editor;
+}
+
+async function bulkImageUpload(event) {
+  const files = [...(event.target.files || [])];
+  if (files.length === 0) return;
+
+  const created = [];
+  for (const file of files) {
+    created.push(addPresent({
+      title: "",
+      image: await filePreviewPayload(file),
+    }));
+  }
+
+  created[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  event.target.value = "";
 }
 
 function readFileAsBytes(file) {
@@ -572,10 +586,6 @@ function filesByName(fileList) {
   return files;
 }
 
-function selectedVaultFilesByName() {
-  return filesByName(existingVaultFilesInput.files);
-}
-
 async function decryptFileItemForResume(item, aesBytes, vaultFiles) {
   const fileName = item.source.path?.split("/").pop();
   let bytes = null;
@@ -746,107 +756,6 @@ async function resumeBuild(event) {
   }
 }
 
-async function rotateInlineItem(item, oldKey, newKey) {
-  const payload = await decryptJson(item.source, oldKey);
-  return {
-    ...item,
-    source: {
-      kind: "inline",
-      ...(await encryptJson(payload, newKey)),
-    },
-  };
-}
-
-async function rotateFileItem(item, oldKey, newKey, vaultFiles, files) {
-  const fileName = item.source.path.split("/").pop();
-  const file = vaultFiles.get(fileName);
-  if (!file) {
-    throw new Error(`Select existing encrypted media file ${fileName}.`);
-  }
-
-  const decryptedBytes = await decryptBytes({
-    iv: item.source.iv,
-    bytes: await readFileAsBytes(file),
-  }, oldKey);
-  const encrypted = await encryptBytes(decryptedBytes, newKey);
-  files.push({
-    path: item.source.path,
-    name: fileName,
-    blob: new Blob([encrypted.bytes], { type: "application/octet-stream" }),
-  });
-
-  return {
-    ...item,
-    source: {
-      ...item.source,
-      iv: encrypted.iv,
-    },
-  };
-}
-
-async function rotateResource(resource, oldKey, newKey, vaultFiles, files) {
-  const rotated = {
-    ...resource,
-    items: [],
-  };
-
-  for (const item of resource.items || []) {
-    if (item.source.kind === "inline") {
-      rotated.items.push(await rotateInlineItem(item, oldKey, newKey));
-    } else if (item.source.kind === "file") {
-      rotated.items.push(await rotateFileItem(item, oldKey, newKey, vaultFiles, files));
-    } else {
-      throw new Error(`Unknown source kind for ${resource.title}.`);
-    }
-  }
-
-  return rotated;
-}
-
-async function rotateMasterPassword(event) {
-  event.preventDefault();
-  downloadArea.replaceChildren();
-  saveToFolderButton.disabled = true;
-  lastBuild = null;
-
-  const submit = rotatePasswordForm.querySelector("button[type='submit']");
-  submit.disabled = true;
-  setStatus("Changing master password. This may take a while...");
-
-  try {
-    const existingManifest = JSON.parse(await readFileAsText(existingManifestInput.files[0]));
-    if (existingManifest.version !== 2) {
-      throw new Error("Only v2 manifests can have their master password changed here.");
-    }
-
-    const oldKey = await validateMasterPassword(currentMasterPasswordInput.value, existingManifest);
-    const newKdf = createKdf(iterationsInput.value);
-    const newKey = await deriveMasterKey(newMasterPasswordInput.value, newKdf);
-    const vaultFiles = selectedVaultFilesByName();
-    const files = [];
-    const manifest = {
-      ...existingManifest,
-      createdAt: new Date().toISOString(),
-      rotatedAt: new Date().toISOString(),
-      kdf: newKdf,
-      verifier: await encryptJson({ ok: true }, newKey),
-      resources: [],
-    };
-
-    for (const resource of existingManifest.resources || []) {
-      manifest.resources.push(await rotateResource(resource, oldKey, newKey, vaultFiles, files));
-    }
-
-    lastBuild = { manifest, files };
-    renderDownloads(manifest, files);
-    setStatus(`Master password changed for ${manifest.resources.length} present(s).`, "success");
-  } catch (error) {
-    setStatus(error.message || "Could not change the master password.", "error");
-  } finally {
-    submit.disabled = false;
-  }
-}
-
 async function writeFile(handle, name, blob) {
   const fileHandle = await handle.getFileHandle(name, { create: true });
   const writable = await fileHandle.createWritable();
@@ -974,21 +883,15 @@ form.addEventListener("submit", async (event) => {
 });
 
 addPresentButton.addEventListener("click", () => addPresent(null, { prepend: true }));
+bulkImageButton.addEventListener("click", () => bulkImageInput.click());
+bulkImageInput.addEventListener("change", bulkImageUpload);
 saveToFolderButton.addEventListener("click", saveBuildToFolder);
 resumeSaveToFolderButton.addEventListener("click", saveResumedToFolder);
 closeMediaPreviewButton.addEventListener("click", () => mediaPreviewDialog.close());
 mediaPreviewDialog.addEventListener("click", (event) => {
   if (event.target === mediaPreviewDialog) mediaPreviewDialog.close();
 });
-for (const button of document.querySelectorAll(".open-password-modal")) {
-  button.addEventListener("click", () => passwordModal.showModal());
-}
-closePasswordModalButton.addEventListener("click", () => passwordModal.close());
-passwordModal.addEventListener("click", (event) => {
-  if (event.target === passwordModal) passwordModal.close();
-});
 resumeForm.addEventListener("submit", resumeBuild);
-rotatePasswordForm.addEventListener("submit", rotateMasterPassword);
 resumeManifestInput.addEventListener("change", updateResumeSourceNotes);
 resumeVaultFilesInput.addEventListener("change", updateResumeSourceNotes);
 setupPasswordToggles();

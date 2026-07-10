@@ -42,13 +42,14 @@ There is no backend. Encryption and decryption happen in the browser with Web Cr
 4. Choose whether each present is **visible** or **hidden**.
 5. For hidden presents, enter a **Hidden unlock phrase**.
 6. Present size, color, wrapping style, and text font are randomized when the present is added. Adjust them only if you want to.
-7. Use a high PBKDF2 iteration count. The default is intentionally slow.
-8. Click **Build encrypted downloads**.
-9. If your browser supports direct folder access, click **Save directly to folder** and choose the folder containing `index.html`.
-10. Otherwise, download `resources.encrypted.json` and every generated `resources/<name>.vault` file.
-11. Place `resources.encrypted.json` next to `index.html`.
-12. Create a `resources/` folder and place the `.vault` files inside it.
-13. Commit and publish with GitHub Pages.
+7. Use **Bulk image upload** to turn several images into image-only memories in one step.
+8. Use a high PBKDF2 iteration count. The default is intentionally slow.
+9. Click **Build encrypted downloads**.
+10. If your browser supports direct folder access, click **Save directly to folder** and choose the folder containing `index.html`.
+11. Otherwise, download `resources.encrypted.json` and every generated `resources/<name>.vault` file.
+12. Place `resources.encrypted.json` next to `index.html`.
+13. Create a `resources/` folder and place the `.vault` files inside it.
+14. Commit and publish with GitHub Pages.
 
 Browsers sandbox local files. A fully frontend builder cannot silently write into the project directory in Safari/Firefox. Chromium-based browsers expose the File System Access API, so the builder enables **Save directly to folder** there; otherwise download links are the fallback.
 
@@ -64,7 +65,39 @@ Hidden unlock phrases cannot be revealed because only their hash is stored. When
 
 ## Change Master Password
 
-The builder has a **Change master password** section. Select the existing manifest, enter the current and new master passwords, and select any existing `.vault` media files. Inline text/song payloads are re-encrypted from the manifest; image/video `.vault` files must be selected because browsers cannot read them from disk automatically.
+Use the command-line utility when you need to rotate the master password:
+
+```sh
+node tools/change_master_password.mjs \
+  --manifest resources.encrypted.json \
+  --vault-dir resources \
+  --old-password OLD \
+  --new-password NEW
+```
+
+The command rewrites the manifest and re-encrypts any image/video `.vault` files. It can also write to separate output paths if you want to stage the rotated files first.
+
+## Validate Password
+
+Use the validator to confirm a password against a manifest without changing anything:
+
+```sh
+node tools/validate_password.mjs \
+  --manifest resources.encrypted.json \
+  --password xcc
+```
+
+Add `--check-resources` to also decrypt every inline payload and every matching `.vault` file:
+
+```sh
+node tools/validate_password.mjs \
+  --manifest resources.encrypted.json \
+  --password xcc \
+  --check-resources \
+  --vault-dir resources
+```
+
+It exits with a nonzero status when the password is wrong or a resource cannot be decrypted.
 
 For local preview, run a static server from this directory:
 

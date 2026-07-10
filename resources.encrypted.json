@@ -1,25 +1,302 @@
 {
   "version": 2,
-  "createdAt": "2026-07-08T15:08:23.177Z",
+  "createdAt": "2026-07-10T08:32:54.837Z",
   "kdf": {
     "name": "PBKDF2",
     "hash": "SHA-256",
     "iterations": 650000,
-    "salt": "45oAwy0i6DvCHCQRNLST2Q=="
+    "salt": "iIarY7DLc1s5O/Ov22VcFg=="
   },
   "verifier": {
-    "iv": "6dbUfx2drkG6VeV+",
-    "ciphertext": "XLAj5+VIB7cxvu+hd3pL/5LdPC/IraIzLpCr"
+    "iv": "H1yL9DJfrel4L2To",
+    "ciphertext": "0MqDdhggbxPYOzwGutXRkjt17qITFEvBT6aa"
   },
   "resources": [
+    {
+      "id": "bb9ab0f6-1c8f-44d3-8b7b-2220656a16ec",
+      "title": "Inainte sa ne fi nascut",
+      "visibility": "hidden",
+      "phraseHash": "taHjaEHgOjQX/b3oWi4i8L3U6qscw3HN4hmj7x/nLK8=",
+      "encryptedPhrase": {
+        "iv": "4KnBIkm3kuYoHZDB",
+        "ciphertext": "HUUQ0SwUHmJG2o6iSxuOqxkSlHfWC9cVMNWGDdsbBNQGZw=="
+      },
+      "present": {
+        "size": "medium",
+        "color": "emerald",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "handwritten"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "SLwpYI545R/eX2/2",
+            "ciphertext": "GeQa14+V/DyA7tgHa4dUCrCyRv6q4iQJsxluF8QVLCRZSH6hhA/30Ziv2A14Sj5hRT2rGsqU4xE1BE73vg=="
+          }
+        },
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "ua9NHkoK8x49GZ4C",
+            "ciphertext": "VPCNLPgd3Eu9HyKZUxeBsCQDJ2RLzbVZUoHzkCa4W3ZFk0CFnDYVGDfnwCDC5EuoJtHAsDoy2ETjxmO76kp9ybpVlWJrXz5uaKvxG9DeGqM65Ag2gAeWRoD6qQ=="
+          }
+        }
+      ]
+    },
+    {
+      "id": "4dc6df87-6897-419b-8f45-435f72955a10",
+      "title": "Supranatural",
+      "visibility": "hidden",
+      "phraseHash": "d3mY+2x8zHKyAt+aG+9ff14CPGuCRtEVIFqaox0eYkY=",
+      "encryptedPhrase": {
+        "iv": "RBy5UWz1llQP02L6",
+        "ciphertext": "y+N2haVjGCwSZbKVHDDwzlcjcbp7jyBVqNfVAZYdCu2cxeTtjAo="
+      },
+      "present": {
+        "size": "tall",
+        "color": "white",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "FaivqmvMBdnN+Zws",
+            "ciphertext": "EfiaJNGs8LQOc7f/SOFJ3fIGOtO2iBkMMpcTVaAKcXDPIjqavgApmYe8b3OMHWVNsvQqf8B7lyX1+ocddWvVqwZKR/Z51jEQBZow80wjuXYEkLWP5ophg5OOozxoJrxqDc1zF1FH67B0lguBj0gp"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7ee9e2f1-4986-46ce-bc89-d2208a5a031d",
+      "title": "La capat de linie",
+      "visibility": "hidden",
+      "phraseHash": "5KnmJp9Mk3Ult+KwosVFfCgWB62OK8V0kFr5FQCFPKs=",
+      "encryptedPhrase": {
+        "iv": "SgEHH1DjPZwru3yx",
+        "ciphertext": "Tn3l5LqYZBI68PipTBdT+IQOIBBXl01a90hBm7v/NA=="
+      },
+      "present": {
+        "size": "small",
+        "color": "gold",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "ld5clKzIXuwGPWnz",
+            "ciphertext": "Cx4m3Nlifz+A8tAF7hz+1icQHv0Apd+6xqe1MXYRJuqb2t6wHZNm6xU/Ih/lUSpQRvLAjlT7Ko+hdv5ZvTENldi0ms6cQFPmBBSAJndFNgkBbPoJNxEiHgcdX+X53tlrWIbg0xTVvcxq2SH9TYA5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bb389d52-74e2-49ce-92f1-b97896734d8f",
+      "title": "Home",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "emerald",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "garden"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "/hLlUL4gTboW+/fl",
+            "ciphertext": "zMokQNEZOBjBVcLTWaAxI5Ajty7IbEDVmu8QnwIY4lBsjmKxtSZOEgOgihjRXymhIRg2Nw=="
+          }
+        },
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "YpVfDkR9JoS6ujM3",
+            "ciphertext": "5I2JtPogtu4T2OaHIJVIhnq0KK0EoiSCE/+FOp4sxoYavakczj8MNcdHZs55FPmY2BH41m3h1HvMWt5u1MbPfY6Wtg+vElNHD8znWVfT557grQOdFtrdTtyJFWaqgdjv/qLKsBCmZ32Lqhzh8O5b"
+          }
+        }
+      ]
+    },
+    {
+      "id": "da29d01b-791d-48d2-baa3-6e2bc320a252",
+      "title": "1973",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "small",
+        "color": "sage",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "uepepQ+CgfMKc7oB",
+            "ciphertext": "gtoolyHrvOVCyUfBoa+MSegxAyJ/IcLXg3mh/7lceH5hmOUy0gAeg6G7qCtQJRNjw49Qw2BN+sMw19PC0A0rRge8J+FuQAsmjPI1CBC0BZmT+7cmp97A9paHyEIOi5ygtyNiL/vVBsJdH5ODUOL6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6801fb24-a482-4dcd-83b4-1fdc7788463d",
+      "title": "Lucky",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "white",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "cinematic"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "zMf/IlpqJ6dcc4Yd",
+            "ciphertext": "NkBMtMMxXnRjVp47z/cLzvPHKW1472PbfxojEQdiuCcFjiWbWTA92pCBTFocHc27CzV1AdFj"
+          }
+        },
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "G3H38sBKaPLDN9wV",
+            "ciphertext": "00xej6bxK+jWGXuZ8P76uAQt0P/6Eu3WSfrcM2oW/Z3+S4LNB/EU7j4lRHGajV9KglwJzAG2S+Qsv7jqlGOKYGqDMFHpJ31+qBUyMIB4yM4F5D0AIuFMCy1syHFzNmp1m/kKukI+oplqGqtXQ+jf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "1e537e62-186f-40f9-b96c-f7720431d575",
+      "title": "Feels like home",
+      "visibility": "hidden",
+      "phraseHash": "Cdltnguu1EvkjjNo/aE1TwK9phf51hqa3Ihtogn9Qrg=",
+      "encryptedPhrase": {
+        "iv": "CVwo8l4/gctmZ7Ez",
+        "ciphertext": "/esgw0+uX85gkp0lmJLbKl0ajBP7FGwr4rE+5naVMfLy"
+      },
+      "present": {
+        "size": "tall",
+        "color": "gold",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "DwYUVsawg/M9OM+7",
+            "ciphertext": "G7buvAhDx9nRS95ptiqTd7d1Gb1RR1kYgMlnmYwvDvqQtsN34gH49ByV667mlNkIa+ex0yk2DE5mKZqd1Ah7ZXzjckq8nbFrg49IC6AFPLoMZGSu1GlXyt53CjLFvPwO1blOVL3lWz9BLrCLBvLv"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2b2a22a6-4462-46c1-9cf2-32cb8a85c19a",
+      "title": "A thousand years",
+      "visibility": "hidden",
+      "phraseHash": "bQ2G+TlJMJNvC+kXk09ekaLzDLchBmJn/TopOxUxD3M=",
+      "encryptedPhrase": {
+        "iv": "EBMEe0S2AtpXcD9s",
+        "ciphertext": "MiiWZIvII5Ig9QMgdUqxt27U3gRQ0VLv2AVu6M7XPg=="
+      },
+      "present": {
+        "size": "small",
+        "color": "sage",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "4pvApwN5tRTKY4y+",
+            "ciphertext": "+nlrLoixb9Oo3Pm3ExgacFQ7pi9T23q6Ln2BlgbBg8zGHKEknqgbfh/uvZn88cyQSVnyhUXCNgMtjCV1ALsJO1vjXt92r9o245Pxk6JD60/8T5yzV9jB+VAmqw=="
+          }
+        }
+      ]
+    },
+    {
+      "id": "84b99d97-a57d-4844-8927-e270e0fbeea9",
+      "title": "Am dansat",
+      "visibility": "hidden",
+      "phraseHash": "xnmZs15OG62gaXeNfnWGeBp2RH0i0LeZ256Dh4L2XGU=",
+      "encryptedPhrase": {
+        "iv": "0QiHPK6wnymSLN12",
+        "ciphertext": "CivRWX2P9MVAEpg+GhVkIHd9wQ5QI3nsqFHUDCWymYYI"
+      },
+      "present": {
+        "size": "medium",
+        "color": "gold",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "song",
+          "source": {
+            "kind": "inline",
+            "iv": "dlwrIUoVCMFT4Ngh",
+            "ciphertext": "rYF5OYjYUBm6MVRKQ0kr53pb/6aCNKbi2+wNWRBMzScQFWhH+sVG/i10ZiRkP23V0Vgzyxj+6GoZgDcwaGgMLTQRurAxRC0nb7IT0zpKi8w7oI76/81jkqTC+rh2cg=="
+          }
+        }
+      ]
+    },
+    {
+      "id": "537ae97e-76f8-4927-a013-924bb0d16e8e",
+      "title": "40",
+      "visibility": "hidden",
+      "phraseHash": "8H30dSxim8M6B3MsQsXf2+1LRKTFPEc72uHVVRR/Bok=",
+      "encryptedPhrase": {
+        "iv": "kjYOiNov9Ownz/SI",
+        "ciphertext": "vVuJZjLGacXCdp5bHlxdTAfSg3KlL888K7eWHrNBRg=="
+      },
+      "present": {
+        "size": "small",
+        "color": "gold",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "text",
+          "meta": {
+            "fontStyle": "handwritten"
+          },
+          "source": {
+            "kind": "inline",
+            "iv": "DGP30xFGVPA78BXs",
+            "ciphertext": "ZeiB2yPpkhouav0jcnnxzJI1Fc9ZepUbBO2DxJIHkFeOoR0CKonsx6sz8FMyYCNgTwVWzRxIRxtPneCDxocbormRUfC/YSFlquHjgPHPswSJTUzYiK/7iWZwn+HHOMWT6k/dL7iogSKc3buPF9nGFmWyGY8vTjNMl620Gx00v8VFux2Za09I5KiWlqEnavKoP3JXCeFcvduXk0AI923Z+NnbMJF95Cjx2M8nE/mWmuvPt6U7tV29Jkfi"
+          }
+        }
+      ]
+    },
     {
       "id": "6eb1dd03-9e98-4327-8bc6-6d3c25e1b332",
       "title": "San Diego",
       "visibility": "hidden",
       "phraseHash": "UsBxl1R/NIOcZYbHHKDXBZ6OFfDsX0Imgs7T4BaOJ74=",
       "encryptedPhrase": {
-        "iv": "CPdFsK7uy72PdTom",
-        "ciphertext": "92+f0831hXjiYPwMGiBabEE+J+hxIa/T63+Z3VPYwEQRmGOCDDI="
+        "iv": "EFZG7zeR+Z7k/buO",
+        "ciphertext": "ZkRGF+jyik4wc/UxvpAKznxQh4rO60K60AwEGwBaaEpnflBh+bU="
       },
       "present": {
         "size": "large",
@@ -34,8 +311,8 @@
           },
           "source": {
             "kind": "inline",
-            "iv": "Dms2uXWlsYsky9MC",
-            "ciphertext": "wrbM6iJi7lI+iDHGQJtVARX/i180DLrlwbr8IX2o3F8PNxRGImCSDmAnA/wBR8M0XXa4HcFnHlKfMaLhOw=="
+            "iv": "xJS07YPJFcNpce84",
+            "ciphertext": "Fks42JxbI/gL8k9NyNPqfAVYwW4if3MP/fXAfc8rMDb9ADCH9+OlQIb6ROnrC+yepEqLHH1fb2bGndFVqg=="
           }
         },
         {
@@ -43,7 +320,7 @@
           "source": {
             "kind": "file",
             "path": "resources/san-diego-image-6eb1dd03-9e98-4327-8bc6-6d3c25e1b332.vault",
-            "iv": "FjAiUPYsZctLz6ef",
+            "iv": "A7vquI6GwlAWA3qq",
             "mimeType": "image/jpeg",
             "originalName": "IMG_7646.jpeg"
           }
@@ -69,16 +346,566 @@
           },
           "source": {
             "kind": "inline",
-            "iv": "yIkfTpCKEyHqVwfg",
-            "ciphertext": "CM/Yr9dm1QrSrcfTBDQq/0s3hvWiWVIgPfk7s6bous6YwE99lg9O8+cycVxPPygkw4v2HC6KGzfeFoWQY1l0ElCa3/N/pTI10aXXwk5RAPc="
+            "iv": "nhPnWI97h1aPP+eV",
+            "ciphertext": "qM3rRaXw64wfzYCZu7+AII0jxNQ5NH2rfuuasExkOcYRaGrZB+SdPTgFcaBFzU4VFeX9THJkeTiWdIoUNQ71fTs/uL57gK+BXwGG25BcWSM="
           }
         },
         {
           "type": "song",
           "source": {
             "kind": "inline",
-            "iv": "8TrKlG1Mnsxwyxp2",
-            "ciphertext": "WGOami8prTqKmHveDf2bfSrSLB1AVXQy7Hwv/iPIMfiCvkiNLzaOIWj1Adab8AA4wg+cbbAQiaxgUcHBgQk/oaE/KjvmmYG1Og42ZGC9nmxWjnNFrkxNy+37yw=="
+            "iv": "xmKq4SyzxUSS5xT+",
+            "ciphertext": "9eSZycHlwJk3fUxvlq0raKVei7gPzopl6pxNqXLV+J4PxwhnQbxg35JFFxojdAuxzk0iAPQ/+0Y1sxztm8DxTcoeNL8NSJlyoyq8C0pz68p7PrHwyVuISo46CA=="
+          }
+        }
+      ]
+    },
+    {
+      "id": "9ee3b427-4de9-4b26-bc85-d76d68f3915a",
+      "title": "Sanius",
+      "visibility": "hidden",
+      "phraseHash": "8Yqs4nFXCYSFPHrTrGsUcFSKBlRaVwEiUrYhCfPqLlQ=",
+      "encryptedPhrase": {
+        "iv": "HvygY9cHMGtlFVqX",
+        "ciphertext": "ahL+vqOD9JQM1Tf9qGV0t/HOZ5T/If5OMcfZuBiZPoSWaGk="
+      },
+      "present": {
+        "size": "tall",
+        "color": "sage",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/sanius-image-9ee3b427-4de9-4b26-bc85-d76d68f3915a.vault",
+            "iv": "2xDKBBtTpFpDX+GD",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a32c030e-7709-4076-a7a6-a335c3172373",
+      "title": "O sala",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "mint",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/o-sala-image-a32c030e-7709-4076-a7a6-a335c3172373.vault",
+            "iv": "oVpM9pCvO02e9Qv2",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3a0d110d-ba6c-4b6e-8e10-73e3912e6967",
+      "title": "Apus",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "large",
+        "color": "sage",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/apus-image-3a0d110d-ba6c-4b6e-8e10-73e3912e6967.vault",
+            "iv": "JbjJMfJtiZn10/uQ",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2f027ee1-b1e2-4faa-883b-02fc517739a4",
+      "title": "Soare",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "mint",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/soare-image-2f027ee1-b1e2-4faa-883b-02fc517739a4.vault",
+            "iv": "5SnCpiR7E5CtJJf5",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "98505796-af18-4898-8fa4-4e8a415aa9c9",
+      "title": "Soare",
+      "visibility": "hidden",
+      "phraseHash": "Kdu6h0OKItij7d3D6zTNnu2oqeM3cB7M3QVNszBu0yw=",
+      "encryptedPhrase": {
+        "iv": "c6uGnvbLR7ty98Ys",
+        "ciphertext": "RTrnQhNuk9OxJ7zgT1hUdda1RyD5aH29+GTwb7Jo4cc="
+      },
+      "present": {
+        "size": "medium",
+        "color": "emerald",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/soare-image-98505796-af18-4898-8fa4-4e8a415aa9c9.vault",
+            "iv": "5iWpFwSAHQ2qG4rU",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6e5390b6-90b4-42e6-a742-9b8b6c5623c6",
+      "title": "Sky is the limit",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "emerald",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/sky-is-the-limit-image-6e5390b6-90b4-42e6-a742-9b8b6c5623c6.vault",
+            "iv": "0wfK4yLrJMMKesPR",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "70d04016-ddba-49f9-9ef8-4e8b6badc858",
+      "title": "O umbrela",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "gold",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/o-umbrela-image-70d04016-ddba-49f9-9ef8-4e8b6badc858.vault",
+            "iv": "uDvti/gTj609NvWq",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ce835cdd-9948-4eba-9fad-0b7402a78e1c",
+      "title": "Un lac",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "emerald",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/un-lac-image-ce835cdd-9948-4eba-9fad-0b7402a78e1c.vault",
+            "iv": "76k1j4e9/E3xUDn8",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "76208f99-76b2-4848-b573-088db58f35da",
+      "title": "Fix you",
+      "visibility": "hidden",
+      "phraseHash": "/z3VPlROuSZaz1DIgZ9vS0vgy2y7/XrL5RefAJb+iMU=",
+      "encryptedPhrase": {
+        "iv": "ehqG3y6oXXOb6ad5",
+        "ciphertext": "e+gGMzSIfSWnJLY6/htjlrwqVzximASX3pxxZkEDVxjmGTk="
+      },
+      "present": {
+        "size": "small",
+        "color": "white",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/fix-you-image-76208f99-76b2-4848-b573-088db58f35da.vault",
+            "iv": "FpcNkMDU0sDBT/e3",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d40de7e5-f97e-4c64-8633-2fc24eb2be8d",
+      "title": "Dr. Felix 9",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "small",
+        "color": "white",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/dr-felix-9-image-d40de7e5-f97e-4c64-8633-2fc24eb2be8d.vault",
+            "iv": "2n4x6HYRn8zrXP/4",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7f55c3ab-f728-475e-abb1-d92f45335895",
+      "title": "Impreuna, mereu",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "mint",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/impreuna-mereu-image-7f55c3ab-f728-475e-abb1-d92f45335895.vault",
+            "iv": "Q6m783+JNnwNytVD",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "9039171e-aeed-4218-ac1f-8416478bae7c",
+      "title": "Reflexie",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "mint",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/reflexie-image-9039171e-aeed-4218-ac1f-8416478bae7c.vault",
+            "iv": "ijsQCUWfnzQVzchV",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "97b12b66-0c4d-45b2-ab9b-9125bff442bc",
+      "title": "Reviste!",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "white",
+        "style": "ribbon"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/reviste-image-97b12b66-0c4d-45b2-ab9b-9125bff442bc.vault",
+            "iv": "G0K2i/Ji/mkp3Jsc",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "19ce82e1-97cd-40bf-8a31-51282b99c34e",
+      "title": "GSS",
+      "visibility": "hidden",
+      "phraseHash": "WKHN7nPqrCS5yBgXfTreBE7qgi+uZD328NMIBLnDdxU=",
+      "encryptedPhrase": {
+        "iv": "vDyL5rRxYAMSEySk",
+        "ciphertext": "XZ8u+uWJ0fEZwN6b+yrbpsEiLvrYksiUVEQamUqpzfw="
+      },
+      "present": {
+        "size": "tall",
+        "color": "mint",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/gss-image-19ce82e1-97cd-40bf-8a31-51282b99c34e.vault",
+            "iv": "JJuMcqvcuKrKVIFk",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7e4504c8-513a-42e9-abd1-1440a1f87540",
+      "title": "New York",
+      "visibility": "hidden",
+      "phraseHash": "TSHuk1wGBm1l1hr7PnfjsyvLcCq8cnYkcZrrAj+VFf4=",
+      "encryptedPhrase": {
+        "iv": "1f5Djm/1KjlF0oA7",
+        "ciphertext": "DEWWWIkyaa5cOrWUaA98Z6JrFjHBUuSubqC5NZXR/9Wthcm/"
+      },
+      "present": {
+        "size": "small",
+        "color": "emerald",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/new-york-image-7e4504c8-513a-42e9-abd1-1440a1f87540.vault",
+            "iv": "Hb5O9VsztR6epsoG",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "734656d9-f5ac-47f1-80ec-6df1548d26e5",
+      "title": "Vintage Green",
+      "visibility": "hidden",
+      "phraseHash": "cuQglYjDRD8HrDYoc/n+EErqOjQ/ZSnFEzE477LLQag=",
+      "encryptedPhrase": {
+        "iv": "Ljtb6RRAVqVSnJ+h",
+        "ciphertext": "qNOZGGJq+1bZCRQo5n4qSX/BAnzGpEA37/IuTCHqyXmvjen4xIna/EY="
+      },
+      "present": {
+        "size": "tall",
+        "color": "mint",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/vintage-green-image-734656d9-f5ac-47f1-80ec-6df1548d26e5.vault",
+            "iv": "xjyLJuM6IH1QX0Wf",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "52c9a0b7-0afb-409f-80a1-12825612ad64",
+      "title": "Cea mai lunga zi",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "mint",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/cea-mai-lunga-zi-image-52c9a0b7-0afb-409f-80a1-12825612ad64.vault",
+            "iv": "ZuYtR5qyWcdCahcN",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "e40c2621-6d8b-4cb6-96f2-392c19b2f555",
+      "title": "Avocado love",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "emerald",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/avocado-love-image-e40c2621-6d8b-4cb6-96f2-392c19b2f555.vault",
+            "iv": "7lDcrQOOLmOJnxN/",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c1186bce-155e-407f-ae1f-08ac8ee67438",
+      "title": "Bordura",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "small",
+        "color": "gold",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/bordura-image-c1186bce-155e-407f-ae1f-08ac8ee67438.vault",
+            "iv": "nQ+oSNP2aL5nNyul",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7593dd98-5aa7-43a5-be5e-ceaf061152e1",
+      "title": "Mare cu soare",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "small",
+        "color": "sage",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/mare-cu-soare-image-7593dd98-5aa7-43a5-be5e-ceaf061152e1.vault",
+            "iv": "/1YIVwRP1LYN5yuH",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bd86e75b-ae48-4fc2-9ca1-a015451ba009",
+      "title": "Privirea",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "tall",
+        "color": "white",
+        "style": "botanical"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/privirea-image-bd86e75b-ae48-4fc2-9ca1-a015451ba009.vault",
+            "iv": "3/nPcAC8VhHkQG3B",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f143059a-5141-45b2-8b00-943950f3543b",
+      "title": "Profil",
+      "visibility": "visible",
+      "phraseHash": null,
+      "encryptedPhrase": null,
+      "present": {
+        "size": "medium",
+        "color": "white",
+        "style": "dots"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/profil-image-f143059a-5141-45b2-8b00-943950f3543b.vault",
+            "iv": "M0JUPL3nEJc/yOEZ",
+            "mimeType": "image/jpeg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "73bc514d-4c02-4059-83f9-f0ad7b53167e",
+      "title": "Memory present",
+      "visibility": "hidden",
+      "phraseHash": "VZ0Aq4WdIeq6XuHci+Ih3JyP51J/8YkgYMgYNcBwsGs=",
+      "encryptedPhrase": {
+        "iv": "OZRs7n+GqidX+XIG",
+        "ciphertext": "FcNP9zarPUPBhJl94KRbstrGc7RnGsQv2cxNTd/oug=="
+      },
+      "present": {
+        "size": "tall",
+        "color": "white",
+        "style": "stripe"
+      },
+      "items": [
+        {
+          "type": "image",
+          "source": {
+            "kind": "file",
+            "path": "resources/memory-present-image-73bc514d-4c02-4059-83f9-f0ad7b53167e.vault",
+            "iv": "PLKB7EqDXYrlYM1i",
+            "mimeType": "image/jpeg"
           }
         }
       ]

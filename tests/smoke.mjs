@@ -1,7 +1,7 @@
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir, mkdtemp } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 
 const root = new URL("../", import.meta.url);
@@ -58,6 +58,22 @@ async function encryptBytes(bytes, keyBytes) {
     iv: bytesToBase64(iv),
     bytes: new Uint8Array(encrypted),
   };
+}
+
+async function decryptBytes(record, keyBytes) {
+  const key = await crypto.subtle.importKey("raw", keyBytes, "AES-GCM", false, ["decrypt"]);
+  const ciphertext = record.bytes || base64ToBytes(record.ciphertext);
+  const decrypted = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: base64ToBytes(record.iv) },
+    key,
+    ciphertext
+  );
+  return new Uint8Array(decrypted);
+}
+
+async function decryptJson(record, keyBytes) {
+  const bytes = await decryptBytes(record, keyBytes);
+  return JSON.parse(new TextDecoder().decode(bytes));
 }
 
 async function hashSecretPhrase(phrase) {
@@ -186,14 +202,14 @@ function contentType(pathname) {
   }[extname(pathname)] || "application/octet-stream";
 }
 
-async function startServer(manifest, virtualFiles = new Map()) {
+async function startServer(manifest = null, virtualFiles = new Map()) {
   const server = createServer(async (request, response) => {
     try {
       const url = new URL(request.url, "http://localhost");
       let pathname = decodeURIComponent(url.pathname);
       if (pathname === "/") pathname = "/index.html";
 
-      if (pathname === "/resources.encrypted.json") {
+      if (manifest && pathname === "/resources.encrypted.json") {
         response.writeHead(200, { "content-type": "application/json" });
         response.end(JSON.stringify(manifest));
         return;
@@ -469,6 +485,33 @@ async function runIndexTests(cdp, baseUrl) {
   assert(errorGreeting.length > 0, "Unlock error did not render a greeting.");
 }
 
+async function runRandomOrderTests(cdp, baseUrl) {
+  const shuffledManifest = await makeTestManifest();
+  shuffledManifest.resources = shuffledManifest.resources.map((resource) => ({
+    ...resource,
+    visibility: "visible",
+  }));
+  const shuffledServer = await startServer(shuffledManifest);
+  const shuffledAddress = shuffledServer.address();
+  const shuffledBaseUrl = `http://${shuffledAddress.address}:${shuffledAddress.port}`;
+
+  const session = await openPage(cdp, `${shuffledBaseUrl}/index.html`);
+  await waitFor(cdp, session, "document.readyState === 'complete' && !!window.VaultCrypto", "random order load");
+  await waitFor(cdp, session, "!document.querySelector('#unlockForm button[type=\"submit\"]').disabled", "random order manifest-ready unlock button");
+
+  await evaluate(cdp, session, `
+    Math.random = () => 0;
+    document.querySelector('.fold-gate').click();
+    document.querySelector('#masterPassword').value = 'master';
+    document.querySelector('#unlockForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  `);
+
+  await waitFor(cdp, session, "document.querySelectorAll('.present').length === 2", "random order presents");
+  const order = await evaluate(cdp, session, `([...document.querySelectorAll('.present .present-label')].map((node) => node.textContent))`);
+  assert(order.join("|") === "Hidden song|Visible TeXt", "Presents were not shuffled into the expected order.");
+  shuffledServer.close();
+}
+
 async function runMobileIndexTests(cdp, baseUrl) {
   const session = await openPage(cdp, `${baseUrl}/index.html`);
   await cdp.send("Emulation.setDeviceMetricsOverride", {
@@ -534,13 +577,34 @@ async function runBuilderTests(cdp, baseUrl) {
   const session = await openPage(cdp, `${baseUrl}/builder.html`);
   await waitFor(cdp, session, "document.readyState === 'complete' && !!window.VaultCrypto", "builder load");
 
-  const modalOpened = await evaluate(cdp, session, `
-    document.querySelector('.open-password-modal').click();
-    const opened = document.querySelector('#passwordModal').open;
-    document.querySelector('#closePasswordModal').click();
-    opened;
+  const builderControls = await evaluate(cdp, session, `({
+    addMemory: document.querySelector('#addPresent')?.textContent,
+    bulkButton: document.querySelector('#bulkImageButton')?.textContent,
+    passwordButton: Boolean(document.querySelector('.open-password-modal')),
+    passwordModal: Boolean(document.querySelector('#passwordModal'))
+  })`);
+  assert(builderControls.addMemory === "Add memory", "Builder did not rename the add-present button.");
+  assert(builderControls.bulkButton === "Bulk image upload", "Builder did not expose the bulk image upload button.");
+  assert(builderControls.passwordButton === false, "Change master password button should be removed from the builder.");
+  assert(builderControls.passwordModal === false, "Change master password modal should be removed from the builder.");
+
+  await evaluate(cdp, session, `
+    const bulkTransfer = new DataTransfer();
+    bulkTransfer.items.add(new File(['<svg xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" fill="red"/></svg>'], 'bulk-one.svg', { type: 'image/svg+xml' }));
+    bulkTransfer.items.add(new File(['<svg xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" fill="blue"/></svg>'], 'bulk-two.svg', { type: 'image/svg+xml' }));
+    const input = document.querySelector('#bulkImageInput');
+    input.files = bulkTransfer.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
   `);
-  assert(modalOpened, "Change master password modal did not open.");
+  await waitFor(cdp, session, "document.querySelectorAll('.resource-editor').length === 3", "bulk image upload");
+  const bulkUpload = await evaluate(cdp, session, `({
+    titles: [...document.querySelectorAll('.resource-editor')].slice(1).map((editor) => editor.querySelector('.resource-name').value),
+    imageStates: [...document.querySelectorAll('.resource-editor')].slice(1).map((editor) => editor.querySelector('.media-state').textContent),
+    previews: [...document.querySelectorAll('.resource-editor')].slice(1).map((editor) => Boolean(editor.querySelector('.media-preview-button')))
+  })`);
+  assert(bulkUpload.titles[0] === "" && bulkUpload.titles[1] === "", "Bulk-uploaded image titles should start blank.");
+  assert(bulkUpload.imageStates.every((state) => state === "Loaded. Choose another file to replace."), "Bulk image uploads did not preload image previews.");
+  assert(bulkUpload.previews.every(Boolean), "Bulk image uploads did not create preview buttons.");
 
   await evaluate(cdp, session, `
     const first = document.querySelector('.resource-editor');
@@ -551,9 +615,9 @@ async function runBuilderTests(cdp, baseUrl) {
     first.querySelector('.resource-hidden').checked = false;
     first.querySelector('.resource-song').value = '${hiddenSong}';
     const file = new File(['<svg xmlns="http://www.w3.org/2000/svg"></svg>'], 'tiny.svg', { type: 'image/svg+xml' });
-    const transfer = new DataTransfer();
-    transfer.items.add(file);
-    first.querySelector('.resource-image').files = transfer.files;
+    const builderTransfer = new DataTransfer();
+    builderTransfer.items.add(file);
+    first.querySelector('.resource-image').files = builderTransfer.files;
     document.querySelector('#addPresent').click();
     const hidden = [...document.querySelectorAll('.resource-editor')].at(0);
     hidden.querySelector('.resource-name').value = 'Builder HiDdEn';
@@ -564,7 +628,7 @@ async function runBuilderTests(cdp, baseUrl) {
     document.querySelector('#builderForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   `);
 
-  await waitFor(cdp, session, "document.querySelectorAll('.download-link').length === 2", "builder downloads");
+  await waitFor(cdp, session, "document.querySelectorAll('.download-link').length === 4", "builder downloads");
   const output = await evaluate(cdp, session, `
     fetch(document.querySelector('.download-link[download="resources.encrypted.json"]').href).then(async (response) => {
       const manifest = await response.json();
@@ -582,15 +646,121 @@ async function runBuilderTests(cdp, baseUrl) {
     })
   `);
   assert(output.version === 2, "Builder did not create a v2 manifest.");
-  assert(output.count === 2, "Builder manifest resource count is wrong.");
+  assert(output.count === 4, "Builder manifest resource count is wrong.");
   assert(output.titles.includes("Builder MiXeD"), "Builder did not preserve visible title case.");
   assert(output.titles.includes("Builder HiDdEn"), "Builder did not preserve hidden title case.");
+  assert(output.titles.filter((title) => title === "Memory present").length >= 2, "Builder did not export the bulk-uploaded image presents.");
   assert(output.titleTransform === "none", "Builder present title input should not force uppercase.");
   assert(output.itemCounts.includes(3), "Builder mixed present item count is wrong.");
+  assert(output.itemCounts.filter((count) => count === 1).length >= 3, "Builder bulk-uploaded image presents are missing.");
   assert(output.hidden === 1, "Builder hidden resource count is wrong.");
   assert(output.phraseHashes[0]?.length > 20, "Builder did not store hidden phrase hash.");
   assert(output.encryptedPhrases[0]?.length > 20, "Builder did not store encrypted hidden phrase.");
-  assert(output.filePaths[0]?.startsWith("resources/"), "Builder media resource does not point to resources/.");
+  assert(output.filePaths.length === 3, "Builder did not export the expected encrypted media files.");
+  assert(output.filePaths.every((path) => path.startsWith("resources/")), "Builder media resource does not point to resources/.");
+}
+
+async function runRotatePasswordCliTests() {
+  const tempRoot = await mkdtemp(join(tmpdir(), "lily-rotate-cli-"));
+  const inputRoot = join(tempRoot, "input");
+  const outputRoot = join(tempRoot, "output");
+  const inputResources = join(inputRoot, "resources");
+  const outputResources = join(outputRoot, "resources");
+  await mkdir(inputResources, { recursive: true });
+  await mkdir(outputResources, { recursive: true });
+
+  const resumeFixture = await makeResumeManifest();
+  const manifestPath = join(inputRoot, "resources.encrypted.json");
+  const outputManifestPath = join(outputRoot, "resources.encrypted.json");
+  const vaultPath = join(inputResources, "disk-visible-image.vault");
+  await writeFile(manifestPath, JSON.stringify(resumeFixture.manifest, null, 2));
+  await writeFile(vaultPath, Buffer.from(resumeFixture.vaultFiles.get("/resources/disk-visible-image.vault")));
+
+  const result = spawnSync("node", [
+    "tools/change_master_password.mjs",
+    "--manifest", manifestPath,
+    "--vault-dir", inputResources,
+    "--old-password", "master",
+    "--new-password", "rotated",
+    "--output-manifest", outputManifestPath,
+    "--output-vault-dir", outputResources,
+  ], { cwd: root.pathname, encoding: "utf8" });
+
+  assert(result.status === 0, `CLI rotation failed: ${result.stderr || result.stdout}`);
+
+  const rotatedManifest = JSON.parse(await readFile(outputManifestPath, "utf8"));
+  const rotatedKey = await deriveMasterKey("rotated", rotatedManifest.kdf);
+  const verifier = await decryptJson(rotatedManifest.verifier, rotatedKey);
+  assert(verifier.ok === true, "CLI rotation did not produce a valid verifier.");
+  assert(rotatedManifest.kdf.salt !== resumeFixture.manifest.kdf.salt, "CLI rotation did not generate a new KDF salt.");
+  const hiddenResource = rotatedManifest.resources.find((resource) => resource.visibility === "hidden");
+  const hiddenPhrase = await decryptJson(hiddenResource.encryptedPhrase, rotatedKey);
+  assert(hiddenPhrase.phrase === "secret garden", "CLI rotation did not re-encrypt the hidden phrase.");
+  const fileItem = rotatedManifest.resources.flatMap((resource) => resource.items).find((item) => item.type === "image");
+  const encryptedFile = new Uint8Array(await readFile(join(outputResources, fileItem.source.path.split("/").pop())));
+  const decryptedBytes = await decryptBytes({ iv: fileItem.source.iv, bytes: encryptedFile }, rotatedKey);
+  assert(decryptedBytes.length > 0, "CLI rotation did not write a decryptable encrypted media file.");
+}
+
+async function runValidatePasswordCliTests() {
+  const tempRoot = await mkdtemp(join(tmpdir(), "lily-validate-cli-"));
+  const manifestPath = join(tempRoot, "resources.encrypted.json");
+  const manifestResult = spawnSync("git", ["show", "HEAD:resources.encrypted.json"], {
+    cwd: root.pathname,
+    encoding: "utf8",
+  });
+  assert(manifestResult.status === 0, `Could not load the last known good manifest from Git: ${manifestResult.stderr || manifestResult.stdout}`);
+  await writeFile(manifestPath, manifestResult.stdout);
+
+  const manifest = JSON.parse(manifestResult.stdout);
+  const vaultDir = join(tempRoot, "resources");
+  await mkdir(vaultDir, { recursive: true });
+  const fileItem = manifest.resources.flatMap((resource) => resource.items || []).find((item) => item.source.kind === "file");
+  assert(fileItem, "Expected the committed manifest to contain at least one encrypted media file.");
+  const fileName = fileItem.source.path.split("/").pop();
+  const vaultResult = spawnSync("git", ["show", `HEAD:resources/${fileName}`], {
+    cwd: root.pathname,
+    encoding: "buffer",
+    maxBuffer: 20 * 1024 * 1024,
+  });
+  assert(vaultResult.status === 0, `Could not load the last known good vault file from Git: ${vaultResult.stderr || vaultResult.stdout}`);
+  await writeFile(join(vaultDir, fileName), vaultResult.stdout);
+
+  const success = spawnSync("node", [
+    "tools/validate_password.mjs",
+    "--manifest", manifestPath,
+    "--password", "xcc",
+  ], { cwd: root.pathname, encoding: "utf8" });
+  assert(success.status === 0, `Password validation should accept xcc: ${success.stderr || success.stdout}`);
+  assert((success.stdout || "").includes("Password is valid."), "Password validation should confirm success.");
+
+  const checked = spawnSync("node", [
+    "tools/validate_password.mjs",
+    "--manifest", manifestPath,
+    "--password", "xcc",
+    "--check-resources",
+    "--vault-dir", vaultDir,
+  ], { cwd: root.pathname, encoding: "utf8" });
+  assert(checked.status === 0, `Resource validation should accept the committed files: ${checked.stderr || checked.stdout}`);
+  assert((checked.stdout || "").includes("validated"), "Resource validation should report checked items.");
+
+  const brokenDir = join(tempRoot, "missing-resources");
+  await mkdir(brokenDir, { recursive: true });
+  const broken = spawnSync("node", [
+    "tools/validate_password.mjs",
+    "--manifest", manifestPath,
+    "--password", "xcc",
+    "--check-resources",
+    "--vault-dir", brokenDir,
+  ], { cwd: root.pathname, encoding: "utf8" });
+  assert(broken.status !== 0, "Resource validation should fail when a vault file is missing.");
+
+  const failure = spawnSync("node", [
+    "tools/validate_password.mjs",
+    "--manifest", manifestPath,
+    "--password", "wrong",
+  ], { cwd: root.pathname, encoding: "utf8" });
+  assert(failure.status !== 0, "Password validation should reject a wrong password.");
 }
 
 async function runDiskResumeTests(cdp, baseUrl) {
@@ -708,8 +878,8 @@ async function runResumeAddPhotoSaveTests(cdp, baseUrl) {
     (async () => {
       const response = await fetch('/internet-photo.svg');
       const photoBlob = await response.blob();
-      const transfer = new DataTransfer();
-      transfer.items.add(new File([photoBlob], 'internet-photo.svg', { type: 'image/svg+xml' }));
+      const photoTransfer = new DataTransfer();
+      photoTransfer.items.add(new File([photoBlob], 'internet-photo.svg', { type: 'image/svg+xml' }));
       const editor = document.querySelector('.resource-editor');
       editor.querySelector('.resource-name').value = 'Edited saved present';
       editor.querySelector('.resource-phrase').value = 'Edited Secret';
@@ -720,7 +890,7 @@ async function runResumeAddPhotoSaveTests(cdp, baseUrl) {
       editor.querySelector('.resource-text').value = 'Edited text payload';
       editor.querySelector('.resource-style').value = 'cinematic';
       editor.querySelector('.resource-song').value = '${hiddenSong}';
-      editor.querySelector('.resource-image').files = transfer.files;
+      editor.querySelector('.resource-image').files = photoTransfer.files;
       await document.querySelector('#saveResumedToFolder').click();
     })()
   `);
@@ -792,8 +962,11 @@ const cdp = await createCdp(wsUrl);
 
 try {
   await runIndexTests(cdp, baseUrl);
+  await runRandomOrderTests(cdp, baseUrl);
   await runMobileIndexTests(cdp, baseUrl);
   await runBuilderTests(cdp, baseUrl);
+  await runRotatePasswordCliTests();
+  await runValidatePasswordCliTests();
   await runDiskResumeTests(cdp, resumeBaseUrl);
   await runManifestOnlyResumeTests(cdp, manifestOnlyBaseUrl);
   await runResumeAddPhotoSaveTests(cdp, xccResumeBaseUrl);

@@ -61,8 +61,9 @@
         </fieldset>
 
         <section class="builder-toolbar">
-          <button id="addPresent" type="button" class="secondary">Add present</button>
-          <button type="button" class="secondary open-password-modal">Change master password</button>
+          <button id="addPresent" type="button" class="secondary">Add memory</button>
+          <button id="bulkImageButton" type="button" class="secondary">Bulk image upload</button>
+          <input id="bulkImageInput" type="file" accept="image/*" multiple hidden>
           <button type="submit">Build encrypted downloads</button>
           <button id="saveToFolder" type="button" class="secondary" disabled>Save directly to folder</button>
         </section>
@@ -73,40 +74,6 @@
       <section id="builderStatus" class="status" aria-live="polite"></section>
       <section id="downloadArea" class="download-area"></section>
     </main>
-
-    <dialog id="passwordModal" class="builder-modal">
-      <form id="rotatePasswordForm" class="builder-form modal-form">
-        <fieldset>
-          <legend>Change master password</legend>
-          <label>
-            Existing resources.encrypted.json
-            <input id="existingManifest" type="file" accept="application/json,.json" required>
-          </label>
-          <label>
-            Existing encrypted media files
-            <input id="existingVaultFiles" type="file" multiple accept=".vault,application/octet-stream">
-          </label>
-          <label>
-            Current master password
-            <span class="password-row">
-              <input id="currentMasterPassword" type="password" autocomplete="off" required>
-              <button type="button" class="password-toggle" data-toggle-password="#currentMasterPassword" aria-label="Show password" title="Show password"></button>
-            </span>
-          </label>
-          <label>
-            New master password
-            <span class="password-row">
-              <input id="newMasterPassword" type="password" autocomplete="off" required>
-              <button type="button" class="password-toggle" data-toggle-password="#newMasterPassword" aria-label="Show password" title="Show password"></button>
-            </span>
-          </label>
-          <div class="builder-toolbar">
-            <button type="submit">Change master password</button>
-            <button id="closePasswordModal" type="button" class="secondary">Close</button>
-          </div>
-        </fieldset>
-      </form>
-    </dialog>
 
     <dialog id="mediaPreviewDialog" class="media-preview-dialog">
       <button id="closeMediaPreview" type="button" class="ghost close-dialog" aria-label="Close preview">Close</button>
